@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crea una cuenta - TicketNoob</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="register-body">
+  <div class="top-bar">
+    <a href="../index.html" class="back-arrow">←</a>
+    <img src="../assets/ticketnoob-logo.png" alt="Ticket Noob" class="logo">
+    <h2 class="title">Crea una cuenta</h2>
+  </div>
+
+  <div class="form-container">
+    <form id="registerForm">
+      <label>Nombre</label>
+      <input type="text" name="name" required>
+
+      <label>Apellidos</label>
+      <input type="text" name="lastname" required>
+
+      <label>Email</label>
+      <input type="email" name="email" required>
+
+      <label>Contraseña</label>
+      <input type="password" name="password" required>
+
+      <label>Tipo de usuario</label>
+      <select name="typeUser" required>
+        <option value="organizer">Organizador</option>
+        <option value="fan">Fan</option>
+      </select>
+
+      <button type="submit" class="btn-register">Registrarme</button>
+    </form>
+  </div>
+  <div id="loader" class="loader-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+  <div id="successMessage" class="popup hidden" hidden>
+    ¡Registro exitoso!
+  </div>
+  
+  <script src="js/registeruser.js"></script>
+  <div id="loader"></div>
+  <div id="alert"></div>
+
+</body>
+</html>
