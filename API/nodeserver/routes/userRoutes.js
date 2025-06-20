@@ -33,8 +33,8 @@ router.put('/event/update/:id', updateEvent);
 router.get('/event/available', getAllAvailableEvents);
 router.get('/event/:idOwner', getEventsByOwner);
 
-router.post('event/create-with-seats', createSectionsWithSeats);
+router.post('/event/create-with-seats', createSectionsWithSeats);
 
-router.post('sale/create', createSale);
+router.post('/sale/create', createSale);
 
 module.exports = router;
