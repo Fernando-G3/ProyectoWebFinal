@@ -59,7 +59,7 @@ async function loadEvents(endpoint) {
     button.className = 'details';
     button.addEventListener('click', () => {
       localStorage.setItem('selectedEventId', event.idEvent);
-      window.location.href = './sale.html';
+      window.location.href = `./sale.html?id=${event.idEvent}`;
     });
 
     info.innerHTML = `

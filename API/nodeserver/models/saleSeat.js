@@ -29,7 +29,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'SaleSeat',
+    tableName: 'saleseat',
     timestamps: false
   });
 

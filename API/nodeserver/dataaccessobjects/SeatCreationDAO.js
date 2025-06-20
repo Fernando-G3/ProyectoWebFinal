@@ -56,6 +56,22 @@ class SeatCreationDAO {
   }
 }
 
+// Obtiene todas las secciones de un evento
+static async getSectionsByEvent(idEvent) {
+  return await Section.findAll({
+    where: { idEvent }
+  });
+};
+
+// Obtiene los asientos disponibles de una sección
+static async getAvailableSeatsBySection(idSection) {
+  return await Seat.findAll({
+    where: {
+      idSection,
+      isAvailable: 1
+    }
+  });
+};
   
 }
 

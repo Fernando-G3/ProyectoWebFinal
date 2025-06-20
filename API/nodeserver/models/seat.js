@@ -15,7 +15,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Section',
+        model: 'section',
         key: 'idSaleSection'
       }
     },
@@ -26,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'Seat',
+    tableName: 'seat',
     timestamps: false
   });
 

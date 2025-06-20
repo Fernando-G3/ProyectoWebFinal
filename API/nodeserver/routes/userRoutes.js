@@ -15,7 +15,8 @@ const {
 } = require('../controller/eventController');
 
 const { 
-    createSectionsWithSeats 
+    getSectionsByEvent,
+    getAvailableSeatsBySection
 } = require('../controller/seatCreationController');
 
 const { 
@@ -33,6 +34,8 @@ router.put('/event/update/:id', updateEvent);
 router.get('/event/available', getAllAvailableEvents);
 router.get('/event/accessibility', getEventsWithAccessibilityC);
 
+router.get('/sections/:idEvent', getSectionsByEvent);
+router.get('/seats/:idSection', getAvailableSeatsBySection)
 
 router.post('/sale/create', createSale);
 

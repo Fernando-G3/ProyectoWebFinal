@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Compra de Boletos - TicketNoob</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <h2>Compra de Boletos</h2>
+  <div id="eventDetails"></div>
+
+  <form id="purchaseForm">
+    <label for="sectionSelect">Selecciona una sección:</label>
+    <select id="sectionSelect" required>
+      <option value="">-- Selecciona sección --</option>
+    </select>
+
+    <label for="seatSelect">Selecciona un asiento:</label>
+    <select id="seatSelect" required>
+      <option value="">-- Selecciona asiento --</option>
+    </select>
+
+    <label for="paymentType">Tipo de pago:</label>
+    <select id="paymentType" required>
+      <option value="Efectivo">Efectivo</option>
+      <option value="Tarjeta">Tarjeta</option>
+    </select>
+
+    <input type="hidden" id="idClient" value="1" />
+    <button type="submit">Comprar Boleto</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/sale.js"></script>
+</body>
+</html>

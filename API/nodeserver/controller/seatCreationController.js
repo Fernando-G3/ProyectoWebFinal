@@ -56,9 +56,44 @@ const createSeats = async (req, res) => {
   }
 };
 
+const getSectionsByEvent = async (req, res) => {
+  try {
+    const { idEvent } = req.params;
+
+    if (!idEvent) {
+      return res.status(400).json({ message: 'El ID del evento es obligatorio' });
+    }
+
+    const sections = await seatCreationDAO.getSectionsByEvent(idEvent);
+
+    return res.status(200).json({ sections });
+  } catch (error) {
+    console.error('Error en getSectionsByEvent:', error.message);
+    return res.status(500).json({ message: 'Error al obtener las secciones' });
+  }
+};
+
+const getAvailableSeatsBySection = async (req, res) => {
+  try {
+    const { idSection } = req.params;
+
+    if (!idSection) {
+      return res.status(400).json({ message: 'El ID de la sección es obligatorio' });
+    }
+
+    const availableSeats = await seatCreationDAO.getAvailableSeatsBySection(idSection);
+
+    return res.status(200).json({ seats: availableSeats });
+  } catch (error) {
+    console.error('Error en getAvailableSeatsBySection:', error.message);
+    return res.status(500).json({ message: 'Error al obtener los asientos disponibles' });
+  }
+};
 
 
 module.exports = {
   createSections,
-  createSeats
+  createSeats,
+  getSectionsByEvent,
+  getAvailableSeatsBySection
 };
