@@ -26,33 +26,36 @@ class SeatCreationDAO {
    * @param {number} idSection - Sección a la que pertenecen
    * @returns {Promise<Array>} - Lista de asientos creados
    */
-  static async createSeatsInRange(prefix, start, end, idSection) {
-    const transaction = await sequelize.transaction();
-    try {
-      if (!prefix || start < 1 || end < start || !idSection) {
-        throw new Error('Datos inválidos para crear asientos');
-      }
-
-      const seatsToCreate = [];
-
-      for (let i = start; i <= end; i++) {
-        seatsToCreate.push({
-          seatNumber: `${prefix}${i}`,
-          idSection,
-          isAvailable: 1
-        });
-      }
-
-      const createdSeats = await Seat.bulkCreate(seatsToCreate, { transaction });
-      await transaction.commit();
-      return createdSeats;
-
-    } catch (error) {
-      await transaction.rollback();
-      console.error('Error al crear asientos en rango:', error.message);
-      throw new Error('No se pudieron crear los asientos');
+ static async createSeatsInRange(prefix, start, end, idSection) {
+  const transaction = await sequelize.transaction();
+  try {
+    if (!prefix || start < 1 || end < start || !idSection) {
+      throw new Error('Datos inválidos para crear asientos');
     }
+
+    const seatsToCreate = [];
+
+    for (let i = start; i <= end; i++) {
+      seatsToCreate.push({
+        seat: `${prefix}${i}`,
+        idSection,
+        isAvailable: 1
+      });
+    }
+
+    console.log('🧾 Asientos a crear:', seatsToCreate);
+
+    const createdSeats = await Seat.bulkCreate(seatsToCreate, { transaction });
+    await transaction.commit();
+    return createdSeats;
+
+  } catch (error) {
+    await transaction.rollback();
+    console.error('❌ Error al crear asientos en rango:', error.message);
+    throw new Error('No se pudieron crear los asientos');
   }
+}
+
   
 }
 
