@@ -4,16 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iniciar Sesión</title>
-  <link rel="stylesheet" href="../css/styles2.css" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <div class="menu-bar">
-    <img src="../assets/ticketnoob-logo.png" alt="TicketNoob Logo" class="logo" />
-    <div class="menu-links">
-      <a href="#">Inicio</a>
-      <a href="#">Soporte</a>
-    </div>
-  </div>
+    <img src="assets/ticketnoob-logo.png" alt="TicketNoob Logo" class="logo" />
 
   <h1>Inicia sesión</h1>
 
@@ -23,7 +18,17 @@
     <button type="submit">Iniciar sesión</button>
     <p id="error-msg" style="color: red; text-align:center; margin-top:10px;"></p>
   </form>
+    <div id="loader" class="loader-overlay hidden">
+    <div class="spinner"></div>
+    </div>
+    <div id="successMessage" class="popup hidden" hidden></div>
+<div id="alert"></div>
 
-  <script src="../js/login.js"></script>
+
+
+
+  <script src="js/config.js"></script>
+  <script src="js/login.js"></script>
+
 </body>
 </html>

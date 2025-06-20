@@ -5,19 +5,26 @@ const EventDAO = require('../dataaccessobjects/EventDAO');
 
 const createEvent = async (req, res) => {
   try {
-    const { eventName, description, eventDate, eventLocation, eventCity, idOwner, accesibility } = req.body;
+    const {
+      eventName,
+      description,
+      eventDate,
+      eventLocation,
+      eventCity,
+      idOwner,
+      accesibility,
+      eventMap,
+      eventPromotional
+    } = req.body;
 
-    // Verificar si los archivos fueron cargados correctamente
-    const eventMap = req.files ? req.files.eventMap : null;  // Accede al archivo
-    const eventPromotional = req.files ? req.files.eventPromotional : null;
-
+    // Validar campos
     if (!eventName || !description || !eventDate || !eventLocation || !eventCity || !idOwner || !eventMap || !eventPromotional) {
       return res.status(400).json({ message: 'Todos los campos del evento son obligatorios' });
     }
 
-    // Convertir las imágenes a BLOB (buffer)
-    const eventMapBuffer = eventMap ? eventMap.data : null;
-    const eventPromotionalBuffer = eventPromotional ? eventPromotional.data : null;
+    // Convertir imágenes de Base64 a Buffer
+    const eventMapBuffer = Buffer.from(eventMap, 'base64');
+    const eventPromotionalBuffer = Buffer.from(eventPromotional, 'base64');
 
     // Crear evento
     const newEvent = await EventDAO.createEvent({
@@ -29,8 +36,8 @@ const createEvent = async (req, res) => {
       accesibility,
       isAvailable: 'Activo',
       idOwner,
-      eventMap: eventMapBuffer,  // Almacenar como BLOB
-      eventPromotional: eventPromotionalBuffer  // Almacenar como BLOB
+      eventMap: eventMapBuffer,
+      eventPromotional: eventPromotionalBuffer
     });
 
     return res.status(201).json({
@@ -43,6 +50,7 @@ const createEvent = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 const updateEvent = async (req, res) => {
   try {
@@ -107,7 +115,7 @@ const getEventsByOwner = async (req, res) => {
   }
 };
 
-const getEventsWithAccessibility = async (req, res) => {
+const getEventsWithAccessibilityC = async (req, res) => {
   try {
     const events = await EventDAO.getEventsWithAccessibility();
     return res.status(200).json(events);
@@ -132,6 +140,6 @@ module.exports = {
   updateEvent,
   getAllAvailableEvents,
   getEventsByOwner,
-  getEventsWithAccessibility,
+  getEventsWithAccessibilityC,
   getLastFiveEvents
 };

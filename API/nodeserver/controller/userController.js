@@ -60,14 +60,13 @@ const updateUser = async (req, res = response) => {
 };
 
 const JWT_SECRET = 'DesarrolloSistemasWebTeamRocket';
-const generateJWT = (userId, email, roleId) => {
-    if (!userId || !email || !roleId) {
+const generateJWT = (idUser, email) => {
+    if (!idUser || !email) {
         throw new Error('Todos los campos son obligatorios');
     }
     const payload = {
-        userId,
+        idUser,
         email,
-        roleId
     };
     const token = jwt.sign(payload, JWT_SECRET, {
         expiresIn: '1h'
@@ -80,20 +79,22 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log(email, "", password);
+        console.log("Login:", email, password);
         const user = await UserDAO.login(email, password);
-        const token = generateJWT(user.idUser, user.email, user.typeUser);
-        console.log(token);
+
+        console.log("Usuario autenticado:", user.email);
         res.status(200).json({
-            message: 'Token generado',
-            token
+            message: 'Inicio de sesión exitoso',
+            user
         });
-        
+
     } catch (error) {
         console.error('Error al validar usuario:', error.message);
         res.status(400).json({ message: error.message });
     }
 };
+
+
 
 module.exports = {
     registerUser,

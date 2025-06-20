@@ -1,10 +1,32 @@
 const urlCreateEvent = `${BASE_API_URL}/nodeserver/event/create`;
-const urlCreateSections = `${BASE_API_URL}/nodeserver/event/create-with-seats`;
+const user = JSON.parse(localStorage.getItem('user'));
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('eventForm');
   const loader = document.getElementById('loader');
   const alertBox = document.getElementById('alert');
+
+  if (!user) {
+    window.location.href = '../index.html';
+    return;
+  }
+
+  document.getElementById('btn-accessibility').addEventListener('click', () => {
+    window.location.href = './events.html';
+  });
+  document.getElementById('btn-events').addEventListener('click', () => {
+    window.location.href = './events.html';
+  });
+  document.getElementById('btn-createEvent').addEventListener('click', () => {
+    window.location.href = './createEvent.html';
+  });
+  document.getElementById('btn-profile').addEventListener('click', () => {
+    window.location.href = './profile.html';
+  });
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    localStorage.removeItem('user');
+    window.location.href = '../index.html';
+  });
 
   if (!form) {
     console.error("No se encontró el formulario con ID 'eventForm'");
@@ -30,12 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const eventMap = document.querySelectorAll('input[type="file"]')[0];
     const eventPromotional = document.querySelectorAll('input[type="file"]')[1];
 
+ 
     [eventName, eventDate, eventLocation, eventCity, eventHour, eventMap, eventPromotional].forEach(el => {
       el.style.border = '';
     });
 
     let hasError = false;
-
     const requiredFields = [
       { el: eventName, value: eventName.value.trim() },
       { el: eventDate, value: eventDate.value.trim() },
@@ -72,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         eventCity: eventCity.value.trim(),
         accesibility: accessibility.value.trim(),
         isAvailable: 'Activo',
-        idOwner: 1,
+        idOwner: user.idUser,
         eventMap: mapBase64,
         eventPromotional: promoBase64
       };
@@ -85,43 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(payload)
       });
 
-      const eventData = await response.json();
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Error al registrar evento');
 
-      if (!response.ok) {
-        throw new Error(eventData.message || 'No se pudo crear el evento');
-      }
+      const idEvent = data.event?.idEvent;
+      if (!idEvent) throw new Error('No se recibió ID del evento');
 
-      console.log('Evento creado con ID:', idEvent);
-
-      const idEvent = eventData.event.idEvent;
-
-      const ticketRows = document.querySelectorAll('.ticket-row');
-      const sections = Array.from(ticketRows).map(row => ({
-        section: row.querySelector('input[name="category[]"]').value,
-        prefix: row.querySelector('input[name="prefix[]"]').value,
-        quantity: parseInt(row.querySelector('input[name="quantity[]"]').value),
-        price: parseFloat(row.querySelector('input[name="price[]"]').value)
-      }));
-
-      console.log('Enviando secciones con:', { idEvent, sections });
-
-      const seatResponse = await fetch(urlCreateSections, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ idEvent, sections })
-      });
-
-      const seatData = await seatResponse.json();
-
-      if (!seatResponse.ok) {
-        throw new Error(seatData.message || 'No se pudieron crear las secciones');
-      }
-
-      loader.style.display = 'none';
-      showAlert('¡Evento y boletos registrados correctamente!');
-      form.reset();
+      localStorage.setItem('createdEventId', idEvent);
+      window.location.href = './createSection.html';
 
     } catch (error) {
       loader.style.display = 'none';
@@ -131,9 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showAlert(message) {
     alertBox.textContent = message;
-    alertBox.style.display = 'block';
+    alertBox.classList.remove('hidden');
     setTimeout(() => {
-      alertBox.style.display = 'none';
+      alertBox.classList.add('hidden');
     }, 4000);
   }
 });

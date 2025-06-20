@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TicketNoob - Crear Evento</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="index-body">
+
+  <div class="menu-bar">
+    <div class="left">
+      <img src="../assets/ticketnoob-logo.png" alt="Logo" class="logo" />
+    </div>
+    <div class="right">
+      <button id="btn-accessibility" class="menu-button">Accesibilidad</button>
+      <button id="btn-events" class="menu-button">Eventos</button>
+      <button id="btn-createEvent" class="menu-button">Crear evento</button>
+      <button id="btn-profile" class="menu-button">Mi perfil</button>
+      <button id="btn-logout" class="menu-button">Salir</button>
+    </div>
+  </div>
+
+  <main class="event-list"> 
+    <h2>Publicar Evento</h2>
+    <div class="wide-form-container">
+      <form id="eventForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="eventName">Nombre del evento</label>
+            <input type="text" id="eventName" name="eventName" />
+          </div>
+          <div class="form-group">
+            <label for="eventDate">Fecha del evento</label>
+            <input type="date" id="eventDate" name="eventDate" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="eventCity">Ciudad del evento</label>
+            <input type="text" id="eventCity" name="eventCity" />
+          </div>
+          <div class="form-group">
+            <label for="eventHour">Hora del evento</label>
+            <input type="text" id="eventHour" name="eventHour" />
+          </div>
+        </div>
+
+        <label for="eventLocation">Ubicación del evento</label>
+        <input type="text" id="eventLocation" name="eventLocation" />
+
+        <label>Mapa del área</label>
+        <input type="file" accept="image/*" name="eventMap" />
+
+        <label>Material promocional</label>
+        <input type="file" accept="image/*" name="eventPromotional" />
+
+        <label for="accessibility" style="margin-top: 20px;">Información adicional de accesibilidad</label>
+        <textarea id="accessibility" name="accessibility" rows="3" placeholder="Ingresa las opciones de accesibilidad, si no existe alguna, deja en blanco"></textarea>
+
+        <div class="center-button">
+          <button type="submit" class="btn-register">Siguiente</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="loader" class="loader-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <div id="alert" class="popup hidden"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/createEvent.js"></script>
+  
+</body>
+</html>
