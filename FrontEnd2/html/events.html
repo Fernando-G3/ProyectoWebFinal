@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TicketNoob - Inicio</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="index-body">
+  <div class="menu-bar">
+    <div class="left">
+      <img src="../assets/ticketnoob-logo.png" alt="Logo" class="logo" />
+    </div>
+    <div class="right">
+      <button id="btn-accessibility" class="menu-button">Accesibilidad</button>
+      <button id="btn-events" class="menu-button">Eventos</button>
+      <button id="btn-createEvent" class="menu-button">Crer evento</button>
+      <button id="btn-profile" class="menu-button">Mi perfil</button>
+      <button id="btn-logout" class="menu-button">Salir</button>
+    </div>
+  </div>
+
+  <main class="event-list">
+    <h2>Eventos</h2>
+    <div id="eventContainer" class="event-container"></div>
+  </main>
+  <script src="../js/config.js"></script>
+  <script src="../js/events.js"></script>
+</body>
+</html>

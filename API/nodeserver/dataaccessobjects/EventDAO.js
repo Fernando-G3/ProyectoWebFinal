@@ -1,5 +1,6 @@
-const { sequelize } = require('../models');
-const Event = require('../models/event');
+
+const { Event, sequelize } = require('../models');
+const { Op } = require('sequelize');
 
 class EventDAO {
 
@@ -20,7 +21,7 @@ class EventDAO {
         eventPromotional: eventData.eventPromotional
       }, { transaction });
       await transaction.commit();
-      return newEvent;
+      return newEvent.get({ plain: true });
 
     } catch (error) {
       await transaction.rollback();
@@ -108,27 +109,31 @@ class EventDAO {
     }
   }
 
-  // Recuperar eventos con accesibilidad definida
-  static async getEventsWithAccessibility() {
-    const transaction = await sequelize.transaction();
-    try {
-      const events = await Event.findAll({
-        where: {
-          accesibility: {
-            [require('sequelize').Op.ne]: null,
-            [require('sequelize').Op.ne]: ''
-          }
-        },
-        transaction
-      });
-      await transaction.commit();
-      return events;
 
-    } catch (error) {
-      await transaction.rollback();
-      throw new Error('Error al obtener eventos con accesibilidad');
-    }
+static async getEventsWithAccessibility() {
+  const transaction = await sequelize.transaction();
+  try {
+    const events = await Event.findAll({
+      where: {
+        accesibility: {
+          [Op.and]: [
+            { [Op.ne]: null },
+            { [Op.ne]: '' }
+          ]
+        },
+        isAvailable: 'Activo'
+      },
+      transaction
+    });
+    await transaction.commit();
+    return events;
+
+  } catch (error) {
+    await transaction.rollback();
+    throw new Error('Error al obtener eventos con accesibilidad');
   }
+}
+
   
   // Recuperar los últimos 5 eventos registrados
   static async getLastFiveEvents() {

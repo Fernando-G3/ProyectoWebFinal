@@ -1,8 +1,15 @@
 const endpoint = '/login';
 const url = `${BASE_API_URL}${endpoint}`;
 
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+const form = document.getElementById('loginForm');
+const loader = document.getElementById('loader');
+const alertBox = document.getElementById('alert');
+const successPopup = document.getElementById('successMessage');
+
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  loader.classList.remove('hidden');
+  alertBox.textContent = '';
 
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value.trim();
@@ -28,17 +35,25 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     });
 
     const data = await response.json();
+    loader.classList.add('hidden');
 
-    if (response.ok) {
-      alert('Inicio de sesión exitoso');
-      localStorage.setItem('token', data.token);
-      window.location.href = 'dashboard.html';
-    } else {
-      alert(data.message || 'Credenciales incorrectas');
+    if (!response.ok) {
+      throw new Error(data.message || 'Error desconocido');
     }
-  } catch (error) {
-    console.error('Error al iniciar sesión:', error);
-    alert('No se pudo conectar con el servidor');
+
+    localStorage.setItem('token', data.token);
+    successPopup.classList.remove('hidden');
+
+    setTimeout(() => {
+      successPopup.classList.add('hidden');
+      window.location.href = 'index.html';
+    }, 2000);
+
+  } catch (err) {
+    loader.classList.add('hidden');
+    alertBox.textContent = err.message;
+    alertBox.style.color = 'red';
+    alertBox.style.textAlign = 'center';
   }
 });
 
