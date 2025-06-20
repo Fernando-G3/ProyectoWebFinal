@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const { response } = require('express');
 const UserDAO = require('../dataaccessobjects/UserDAO');
 

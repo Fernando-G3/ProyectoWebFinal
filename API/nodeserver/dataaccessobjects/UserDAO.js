@@ -32,7 +32,7 @@ class UserDAO {
     static async findUserByEmail(email) {
         try {
             const user = await User.findOne({
-                where: { email }
+            where: { email }
             });
             return !!user; // true si existe, false si no
         } catch (error) {
@@ -70,27 +70,22 @@ class UserDAO {
 
             const foundUser = await User.findOne({
                 where: { email },
-                attributes: ['idUser', 'email', 'name', 'lastname', 'password', 'typeUser'],
                 include: [{ model: UserType, as: 'userType' }]
             });
 
-            console.log(' foundUser:', foundUser ? foundUser.toJSON() : 'No se encontró usuario');
-            console.log(' password en modelo:', foundUser?.password);
-
             if (!foundUser) {
-                throw new Error('Usuario incorrecto');
+                throw new Error('Credenciales incorrectas');
             }
 
             const passwordMatch = await bcrypt.compare(password, foundUser.password);
             if (!passwordMatch) {
-                throw new Error('Contraseña no coincide');
+                throw new Error('Credenciales incorrectas');
             }
 
             return foundUser;
-
+            
         } catch (error) {
-            console.error(' Error interno en login:', error.message);
-            throw new Error('Cae en catch');
+            throw new Error('Credenciales incorrectas');
         }
     }
 }
