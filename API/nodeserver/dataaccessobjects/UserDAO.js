@@ -11,11 +11,13 @@ class UserDAO {
             if (!email || !name || !lastname || !password || !typeUser) {
                 throw new Error('Todos los campos son obligatorios');
             }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = await User.create({
                 email,
                 name,
                 lastname,
-                password,
+                password: hashedPassword,
                 typeUser
             }, { transaction });
             await transaction.commit();
@@ -61,28 +63,31 @@ class UserDAO {
     }
 
     static async login(email, password) {
-    if (!email || !password) {
-        throw new Error('El usuario y la contraseña son obligatorios');
-    }
+        try {
+            if (!email || !password) {
+                throw new Error('El usuario y la contraseña son obligatorios');
+            }
 
-    try {
-        const foundUser = await User.findOne({
-            where: { email, password }
-        });
+            const foundUser = await User.findOne({
+                where: { email },
+                include: [{ model: UserType, as: 'userType' }]
+            });
 
-        if (!foundUser) {
+            if (!foundUser) {
+                throw new Error('Credenciales incorrectas');
+            }
+
+            const passwordMatch = await bcrypt.compare(password, foundUser.password);
+            if (!passwordMatch) {
+                throw new Error('Credenciales incorrectas');
+            }
+
+            return foundUser;
+            
+        } catch (error) {
             throw new Error('Credenciales incorrectas');
         }
-
-        return foundUser;
-
-    } catch (error) {
-        console.error('Error en login:', error.message);
-        throw new Error('Credenciales incorrectas');
     }
-}
-
-
 }
 
 module.exports = UserDAO;

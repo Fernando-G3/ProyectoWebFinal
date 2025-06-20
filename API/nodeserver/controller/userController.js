@@ -59,16 +59,14 @@ const updateUser = async (req, res = response) => {
     }
 };
 
-const JWT_SECRET = 'DesarrolloSistemasWebTeamRocket';
-const generateJWT = (idUser, email) => {
-    if (!idUser || !email) {
+const generateJWT = (userId, email, roleId) => {
+    if (!userId || !email || !roleId) {
         throw new Error('Todos los campos son obligatorios');
     }
-    const payload = {
-        idUser,
-        email,
-    };
-    const token = jwt.sign(payload, JWT_SECRET, {
+
+    const payload = { userId, email, roleId };
+
+    const token = jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
         expiresIn: '1h'
     });
 

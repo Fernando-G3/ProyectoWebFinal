@@ -4,26 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iniciar Sesión</title>
-  <link rel="stylesheet" href="../css/styles2.css" />
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-  <div class="menu-bar">
-    <img src="../assets/ticketnoob-logo.png" alt="TicketNoob Logo" class="logo" />
-    <div class="menu-links">
-      <a href="#">Inicio</a>
-      <a href="#">Soporte</a>
+
+<body class="login-body">
+  <div class="container-login" id="containerLogin">
+    <div class="left-login" id="leftLogin">
+        <div class="left-content">
+            <a href="#" class="back-login">
+            <img src="../assets/icon-back.png" alt="Volver" class="back-icon" />
+            </a>
+            <img src="../assets/ticketnoob-logo.png" alt="Ticket Noob" class="logo-login" />
+            <button class="btn-login-register" id="goToRegister">Registrarme</button>
+        </div>
+    </div>
+
+
+    <div class="right-login" id="rightLogin">
+      <form class="login-form" id="loginForm">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" name="email"  maxlength="45" required />
+
+        <label for="password">Contraseña:</label>
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" maxlength="20" required />
+            <i id="togglePassword" class="fa fa-eye"></i>
+        </div>
+
+
+        <a href="#" class="forgot-password">Olvidé mi contraseña</a>
+
+        <button type="submit" class="btn-login-submit">Iniciar Sesión</button>
+      </form>
     </div>
   </div>
 
-  <h1>Inicia sesión</h1>
-
-  <form id="loginForm">
-    <input type="email" name="email" placeholder="Correo electrónico" required />
-    <input type="password" name="password" placeholder="Contraseña" required />
-    <button type="submit">Iniciar sesión</button>
-    <p id="error-msg" style="color: red; text-align:center; margin-top:10px;"></p>
-  </form>
-
+  <script src="../js/config.js"></script>
   <script src="../js/login.js"></script>
+  <script src="../js/responsive-components.js"></script>
+
 </body>
+
 </html>

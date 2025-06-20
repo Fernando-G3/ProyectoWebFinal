@@ -1,21 +1,23 @@
-const endpoint = '/nodeserver/login';
+const endpoint = '/login';
 const url = `${BASE_API_URL}${endpoint}`;
 
-const form = document.getElementById('loginForm');
-const loader = document.getElementById('loader');
-const alertBox = document.getElementById('alert');
-const successPopup = document.getElementById('successMessage');
-
-form.addEventListener('submit', async (e) => {
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  loader.classList.remove('hidden');
-  alertBox.textContent = '';
 
-  const email = form.querySelector('input[name="email"]').value.trim();
-  const password = form.querySelector('input[name="password"]').value.trim();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  if (!e.target.checkValidity()) {
+    const firstInvalid = e.target.querySelector(':invalid');
+    if (firstInvalid) {
+      firstInvalid.focus();
+      firstInvalid.reportValidity();
+    }
+    return;
+  }
 
   try {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(url, { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -24,24 +26,41 @@ form.addEventListener('submit', async (e) => {
     });
 
     const data = await response.json();
-    loader.classList.add('hidden');
 
-    if (!response.ok) {
-      throw new Error(data.message || 'Error desconocido');
+    if (response.ok) {
+      alert('Inicio de sesión exitoso');
+      localStorage.setItem('token', data.token);
+      window.location.href = '../index.html'; 
+    } else {
+      alert(data.message || 'Credenciales incorrectas');
     }
-
-    localStorage.setItem('token', data.token);
-    successPopup.classList.remove('hidden');
-
-    setTimeout(() => {
-      successPopup.classList.add('hidden');
-      window.location.href = 'index.html';
-    }, 2000);
-
-  } catch (err) {
-    loader.classList.add('hidden');
-    alertBox.textContent = err.message;
-    alertBox.style.color = 'red';
-    alertBox.style.textAlign = 'center';
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    alert('No se pudo conectar con el servidor');
   }
 });
+
+
+
+//boton mostrar u ocultar contrasenia
+document.addEventListener('DOMContentLoaded', () => {
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+
+      // Cambia el ícono
+      togglePassword.classList.toggle('fa-eye');
+      togglePassword.classList.toggle('fa-eye-slash');
+    });
+  }
+});
+
+
+document.getElementById('goToRegister').addEventListener('click', () => {
+  window.location.href = 'registerUser.html';
+});
+
