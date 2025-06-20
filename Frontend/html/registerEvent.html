@@ -74,12 +74,7 @@
       </button>
 
       <label for="accessibility" style="margin-top: 20px;">Información adicional de accesibilidad</label>
-      <textarea
-        id="accessibility"
-        name="accessibility"
-        rows="3"
-        placeholder="Describa las caracteristicas de accesibilidad, si no hay, deje en blanco."
-      ></textarea>
+      <textarea id="accessibility" name="accessibility" rows="3" placeholder="Ingrsa las opciones de accesibiliad, si no existe alguna, deja en blanco"></textarea>
 
       <div class="center-button">
         <button type="submit" class="btn-register">Publicar Evento</button>
@@ -87,11 +82,13 @@
     </form>
   </div>
 
-  <div id="loader"></div>
-  <div id="alert">Evento publicado correctamente</div>
+  <div id="loader" class="loader-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <div id="alert" class="popup hidden"></div>
+
   
-  <script src="../js/config.js"></script>
-  <script src="../js/registerevent.js"></script>
   <script>
     function addTicketRow() {
       const container = document.getElementById("ticketContainer");
@@ -118,5 +115,7 @@
       }
     }
   </script>
+  <script src="../js/config.js"></script>
+  <script src="../js/registerevent.js"></script>
 </body>
 </html>

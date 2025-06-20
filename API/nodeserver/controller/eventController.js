@@ -117,9 +117,6 @@ const getEventsWithAccessibility = async (req, res) => {
   }
 };
 
-const { response } = require('express');
-const EventDAO = require('../dataaccessobjects/EventDAO');
-
 const getLastFiveEvents = async (req, res) => {
   try {
     const events = await EventDAO.getLastFiveEvents();

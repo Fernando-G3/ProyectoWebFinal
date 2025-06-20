@@ -1,93 +1,122 @@
-const endpointEvent = '/nodeserver/event/create';
-const endpointSeats = '/nodeserver/event/create-with-seats';
-const urlEvent = `${BASE_API_URL}${endpointEvent}`;
-const urlSeats = `${BASE_API_URL}${endpointSeats}`;
-
 document.addEventListener('DOMContentLoaded', () => {
+  const BASE_API_URL = window.BASE_API_URL || ''; // Fallback si no se cargó config.js
+  const urlCreateEvent = `${BASE_API_URL}/event/create`;
+  const urlCreateSections = `${BASE_API_URL}/event/create-with-seats`;
+
   const form = document.getElementById('eventForm');
   const loader = document.getElementById('loader');
   const alertBox = document.getElementById('alert');
 
+  if (!form) {
+    console.error("No se encontró el formulario con ID 'eventForm'");
+    return;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const eventName = form.querySelector('input[name="eventName"]').value.trim();
-    const eventDate = form.querySelector('input[name="eventDate"]').value.trim();
-    const eventLocation = form.querySelector('input[name="eventLocation"]').value.trim();
-    const eventCity = form.querySelector('input[name="eventCity"]').value.trim();
-    const eventHour = form.querySelector('input[name="eventHour"]').value.trim();
-    const idOwner = 1;  // Asume un ID de propietario para la prueba
-    const accessibility = form.querySelector('textarea[name="accessibility"]').value.trim();
+    const eventName = form.querySelector('input[name="eventName"]');
+    const eventDate = form.querySelector('input[name="eventDate"]');
+    const eventLocation = form.querySelector('input[name="eventLocation"]');
+    const eventCity = form.querySelector('input[name="eventCity"]');
+    const eventHour = form.querySelector('input[name="eventHour"]');
+    const accessibility = form.querySelector('textarea[name="accessibility"]');
 
-    const eventMap = form.querySelector('input[type="file"]').files[0];
-    const eventPromotional = form.querySelector('input[type="file"]:nth-of-type(2)').files[0];
+    const eventMap = document.querySelectorAll('input[type="file"]')[0];
+    const eventPromotional = document.querySelectorAll('input[type="file"]')[1];
 
-    // Recoger secciones de boletos
+    [eventName, eventDate, eventLocation, eventCity, eventHour, eventMap, eventPromotional].forEach(el => {
+      el.style.border = '';
+    });
+
+    let hasError = false;
+
+    const requiredFields = [
+      { el: eventName, value: eventName.value.trim() },
+      { el: eventDate, value: eventDate.value.trim() },
+      { el: eventLocation, value: eventLocation.value.trim() },
+      { el: eventCity, value: eventCity.value.trim() },
+      { el: eventHour, value: eventHour.value.trim() },
+      { el: eventMap, value: eventMap.files[0] },
+      { el: eventPromotional, value: eventPromotional.files[0] }
+    ];
+
+    requiredFields.forEach(({ el, value }) => {
+      if (!value) {
+        el.style.border = '2px solid red';
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      showAlert('Por favor completa todos los campos obligatorios');
+      return;
+    }
+
     const ticketRows = document.querySelectorAll('.ticket-row');
     const sections = Array.from(ticketRows).map(row => ({
       section: row.querySelector('input[name="category[]"]').value,
       prefix: row.querySelector('input[name="prefix[]"]').value,
-      quantity: row.querySelector('input[name="quantity[]"]').value,
-      price: row.querySelector('input[name="price[]"]').value,
+      quantity: parseInt(row.querySelector('input[name="quantity[]"]').value),
+      price: parseFloat(row.querySelector('input[name="price[]"]').value)
     }));
 
-    if (!eventName || !eventDate || !eventLocation || !eventCity || !eventHour) {
-      return alert('Todos los campos son obligatorios');
-    }
+    const formData = new FormData();
+    formData.append('eventName', eventName.value.trim());
+    formData.append('description', `Evento en ${eventLocation.value.trim()}`);
+    formData.append('eventDate', `${eventDate.value.trim()}T${eventHour.value.trim()}`);
+    formData.append('eventLocation', eventLocation.value.trim());
+    formData.append('eventCity', eventCity.value.trim());
+    formData.append('accesibility', accessibility.value.trim());
+    formData.append('idOwner', 1);
+    formData.append('eventMap', eventMap.files[0]);
+    formData.append('eventPromotional', eventPromotional.files[0]);
 
     loader.style.display = 'flex';
 
     try {
-      // 1. Registrar el evento
-      const eventFormData = new FormData();
-      eventFormData.append('eventName', eventName);
-      eventFormData.append('eventDate', eventDate);
-      eventFormData.append('eventLocation', eventLocation);
-      eventFormData.append('eventCity', eventCity);
-      eventFormData.append('idOwner', idOwner);
-      eventFormData.append('accesibility', accessibility);
-      eventFormData.append('eventMap', eventMap);
-      eventFormData.append('eventPromotional', eventPromotional);
-
-      const eventResponse = await fetch(urlEvent, {
+      const response = await fetch(urlCreateEvent, {
         method: 'POST',
-        body: eventFormData
+        body: formData
       });
 
-      const eventData = await eventResponse.json();
+      const eventData = await response.json();
 
-      if (!eventResponse.ok) {
-        throw new Error(eventData.message || 'Error al publicar el evento');
+      if (!response.ok) {
+        throw new Error(eventData.message || 'No se pudo crear el evento');
       }
 
-      // 2. Registrar las secciones y asientos
-      const seatsData = { sections, idEvent: eventData.event.idEvent };
-      
-      const seatsResponse = await fetch(urlSeats, {
+      const idEvent = eventData.event.idEvent;
+
+      const seatResponse = await fetch(urlCreateSections, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(seatsData)
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ idEvent, sections })
       });
 
-      const seatsDataResult = await seatsResponse.json();
+      const seatData = await seatResponse.json();
+
+      if (!seatResponse.ok) {
+        throw new Error(seatData.message || 'No se pudieron crear las secciones');
+      }
 
       loader.style.display = 'none';
-
-      if (!seatsResponse.ok) {
-        throw new Error(seatsDataResult.message || 'Error al crear las secciones y asientos');
-      }
-
-      alertBox.textContent = '¡Evento y boletos publicados correctamente!';
-      alertBox.style.display = 'block';
-
-      setTimeout(() => {
-        alertBox.style.display = 'none';
-        form.reset();
-      }, 3000);
+      showAlert('¡Evento y boletos registrados correctamente!');
+      form.reset();
 
     } catch (error) {
       loader.style.display = 'none';
-      alert(error.message);
+      showAlert(error.message);
     }
   });
+
+  function showAlert(message) {
+    alertBox.textContent = message;
+    alertBox.style.display = 'block';
+    setTimeout(() => {
+      alertBox.style.display = 'none';
+    }, 4000);
+  }
 });

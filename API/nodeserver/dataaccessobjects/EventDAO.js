@@ -129,6 +129,7 @@ class EventDAO {
       throw new Error('Error al obtener eventos con accesibilidad');
     }
   }
+  
   // Recuperar los últimos 5 eventos registrados
   static async getLastFiveEvents() {
     const transaction = await sequelize.transaction();
