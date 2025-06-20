@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package imagespackage;
+
+service filemanagement {
+    rpc uploadImageEvent (uploadImageEventPetition) returns (uploadImageEventResponse) {};
+    rpc downloadImageEvent (downloadImageEventPetition) returns (downloadImageEventResponse) {};
+}
+
+message uploadImageEventPetition {
+    int32 idImage = 1;
+    string fileName = 2;
+    bytes content = 3;
+}
+
+message uploadImageEventResponse {
+    int32 response = 1;
+}
+
+message downloadImageEventPetition {
+    int32 idImage = 1;
+}
+
+message downloadImageEventResponse {
+    bytes content = 1;
+}

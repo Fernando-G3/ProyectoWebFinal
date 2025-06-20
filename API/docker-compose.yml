@@ -1,0 +1,43 @@
+  services:
+
+      grpcserver:
+        image: grpcserver
+
+        ports:
+          - "8081:8081"
+        networks:
+          interna:
+            ipv4_address: 172.16.0.6
+
+      nodeserver:
+        image: nodeserver
+
+        ports:
+          - "8080:8080"
+        networks:
+          interna:
+            ipv4_address: 172.16.0.7
+
+      db: 
+        image: ticketnoob_bd
+        environment:
+          - MYSQL_ROOT_PASSWORD=Contrasenia123
+        volumes:
+          - ticketnoob_bd:/var/lib/mysql
+        ports:
+          - "3309:3306"
+        expose:
+          - 3306
+        networks:
+          interna:
+            ipv4_address: 172.16.0.8
+
+  volumes:
+    ticketnoob_bd:
+
+  networks:
+      interna: 
+          ipam:       
+            config:
+              - subnet:  172.16.0.0/16
+                gateway: 172.16.0.254
