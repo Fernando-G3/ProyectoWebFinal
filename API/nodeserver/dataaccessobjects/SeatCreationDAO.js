@@ -43,7 +43,7 @@ class SeatCreationDAO {
       });
     }
 
-    console.log('🧾 Asientos a crear:', seatsToCreate);
+    console.log('Asientos a crear:', seatsToCreate);
 
     const createdSeats = await Seat.bulkCreate(seatsToCreate, { transaction });
     await transaction.commit();
@@ -51,7 +51,7 @@ class SeatCreationDAO {
 
   } catch (error) {
     await transaction.rollback();
-    console.error('❌ Error al crear asientos en rango:', error.message);
+    console.error('Error al crear asientos en rango:', error.message);
     throw new Error('No se pudieron crear los asientos');
   }
 }

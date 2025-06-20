@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar Secciones - TicketNoob</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="index-body">
+  <div class="menu-bar">
+    <div class="left">
+      <img src="../assets/ticketnoob-logo.png" alt="Logo" class="logo" />
+    </div>
+    <div class="right">
+      <button id="btn-events" class="menu-button">Eventos</button>
+      <button id="btn-profile" class="menu-button">Mi perfil</button>
+      <button id="btn-logout" class="menu-button">Salir</button>
+    </div>
+  </div>
+
+  <main class="event-list">
+    <h2>Registrar Secciones para el Evento</h2>
+
+    <div class="form-container wide-form-container">
+      <form id="sectionForm">
+        <input type="hidden" id="idEvent" name="idEvent" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre de la sección</label>
+            <input type="text" name="section" placeholder="VIP, General..." required />
+          </div>
+          <div class="form-group">
+            <label>Prefijo de asientos</label>
+            <input type="text" name="prefix" placeholder="A, B, C..." required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cantidad de asientos</label>
+            <input type="number" name="quantity" min="1" required />
+          </div>
+          <div class="form-group">
+            <label>Precio por boleto</label>
+            <input type="number" name="price" step="0.01" min="0" required />
+          </div>
+        </div>
+
+        <div class="center-button">
+          <button type="submit" class="btn-register">Registrar Sección</button>
+        </div>
+      </form>
+
+      <div id="alert" class="popup hidden"></div>
+    </div>
+  </main>
+
+  <script src="../js/config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const idEvent = localStorage.getItem('createdEventId');
+      const idInput = document.getElementById('idEvent');
+      const alertBox = document.getElementById('alert');
+
+      if (!idEvent) {
+        alert("No se encontró el ID del evento. Regresa y créalo primero.");
+        window.location.href = './createEvent.html';
+        return;
+      }
+
+      idInput.value = idEvent;
+
+      document.getElementById('sectionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const section = e.target.section.value.trim();
+        const prefix = e.target.prefix.value.trim();
+        const quantity = parseInt(e.target.quantity.value);
+        const price = parseFloat(e.target.price.value);
+
+        try {
+          const response = await fetch(`${BASE_API_URL}/nodeserver/event/section`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idEvent, section, prefix, quantity, price })
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) throw new Error(result.message || 'Error al registrar sección');
+
+          alertBox.textContent = '¡Sección registrada exitosamente!';
+          alertBox.classList.remove('hidden');
+          setTimeout(() => alertBox.classList.add('hidden'), 3000);
+          e.target.reset();
+        } catch (err) {
+          alertBox.textContent = err.message;
+          alertBox.classList.remove('hidden');
+          setTimeout(() => alertBox.classList.add('hidden'), 4000);
+        }
+      });
+
+      document.getElementById('btn-events').addEventListener('click', () => {
+        window.location.href = './events.html';
+      });
+      document.getElementById('btn-profile').addEventListener('click', () => {
+        window.location.href = './profile.html';
+      });
+      document.getElementById('btn-logout').addEventListener('click', () => {
+        localStorage.removeItem('user');
+        window.location.href = '../index.html';
+      });
+    });
+  </script>
+</body>
+</html>

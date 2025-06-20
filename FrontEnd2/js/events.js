@@ -43,29 +43,38 @@ async function loadEvents(endpoint) {
 
     container.innerHTML = '';
     events.forEach(event => {
-      const card = document.createElement('div');
-      card.className = 'event-card';
+    const card = document.createElement('div');
+    card.className = 'event-card';
 
-      const image = document.createElement('img');
-      image.src = `data:image/jpeg;base64,${arrayBufferToBase64(event.eventPromotional.data)}`;
-      image.alt = event.eventName;
-      image.className = 'event-image';
+    const image = document.createElement('img');
+    image.src = `data:image/jpeg;base64,${arrayBufferToBase64(event.eventPromotional.data)}`;
+    image.alt = event.eventName;
+    image.className = 'event-image';
 
-      const info = document.createElement('div');
-      info.className = 'event-info';
+    const info = document.createElement('div');
+    info.className = 'event-info';
 
-      info.innerHTML = `
-        <h3>${event.eventName}</h3>
-        <p><strong>Fecha:</strong> ${new Date(event.eventDate).toLocaleString()}</p>
-        <p><strong>Ciudad:</strong> ${event.eventCity}</p>
-        <p><strong>Ubicación:</strong> ${event.eventLocation}</p>
-        <button class="details">Comprar boletos</button>
-      `;
-
-      card.appendChild(image);
-      card.appendChild(info);
-      container.appendChild(card);
+    const button = document.createElement('button');
+    button.textContent = 'Comprar boletos';
+    button.className = 'details';
+    button.addEventListener('click', () => {
+      localStorage.setItem('selectedEventId', event.idEvent);
+      window.location.href = './sale.html';
     });
+
+    info.innerHTML = `
+      <h3>${event.eventName}</h3>
+      <p><strong>Fecha:</strong> ${new Date(event.eventDate).toLocaleString()}</p>
+      <p><strong>Ciudad:</strong> ${event.eventCity}</p>
+      <p><strong>Ubicación:</strong> ${event.eventLocation}</p>
+    `;
+
+    info.appendChild(button);
+    card.appendChild(image);
+    card.appendChild(info);
+    container.appendChild(card);
+  });
+
 
   } catch (err) {
     container.innerHTML = `<p class="error-msg">No se pudieron cargar los eventos.</p>`;

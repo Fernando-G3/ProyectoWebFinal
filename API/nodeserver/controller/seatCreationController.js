@@ -2,7 +2,7 @@ const seatCreationDAO = require('../dataaccessobjects/SeatCreationDAO');
 
 const createSections = async (req, res) => {
   try {
-    const { sections, idEvent } = req.body;
+    const { sections, idEvent , price} = req.body;
 
     if (!sections || !Array.isArray(sections) || !idEvent) {
       return res.status(400).json({ message: 'Datos inválidos' });
@@ -25,7 +25,7 @@ const createSections = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error en createSections:', error.message);
+    console.error('Error en createSections:', error.message);
     return res.status(500).json({ message: 'Error al crear las secciones' });
   }
 };
@@ -51,7 +51,7 @@ const createSeats = async (req, res) => {
     return res.status(201).json({ message: 'Asientos creados correctamente' });
 
   } catch (error) {
-    console.error('❌ Error en createSeats:', error.message);
+    console.error('sError en createSeats:', error.message);
     return res.status(500).json({ message: 'Error al crear los asientos' });
   }
 };
