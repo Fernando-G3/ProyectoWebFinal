@@ -1,4 +1,5 @@
-const API_URL = 'http://192.168.56.1:8080/api/nodeserver/register';
+const endpoint = '/nodeserver/register';
+const url = `${BASE_API_URL}${endpoint}`;
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registerForm');
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loader.style.display = 'flex';
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

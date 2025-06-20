@@ -1,3 +1,55 @@
+.menu-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1200b4;
+  padding: 0px 1px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.menu-bar .left, .menu-bar .center, .menu-bar .right {
+  display: flex;
+  align-items: center;
+}
+
+.menu-bar .left {
+  flex: 1;
+}
+
+.menu-bar .center {
+  flex: 2;
+  justify-content: center;
+}
+
+.menu-bar .right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.menu-bar a {
+  text-decoration: none;
+  color: white;
+  margin: 0 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.menu-bar .logo {
+  max-width: 110px;
+}
+
+.back-arrow {
+  font-size: 30px;
+  color: orange;
+}
+
+.menu-bar a:hover {
+  color: #c1ff00;
+}
+
 .register-body {
   margin: 0;
   font-family: sans-serif;
@@ -7,32 +59,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-}
-
-.top-bar {
-  text-align: center;
-  margin-top: 0px;
-}
-
-.logo {
-  width: 300px;
-  margin-bottom: 0px;
-}
-
-.back-arrow {
-  font-size: 30px;
-  color: orange;
-  text-decoration: none;
-  position: absolute;
-  left: 20px;
-  top: 20px;
-}
-
-.title {
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-  margin-top: -50px;
+  padding-top: 80px; /* Para dejar espacio al menú fijo */
 }
 
 .form-container {
@@ -41,7 +68,8 @@
   border-radius: 10px;
   box-shadow: 0 0 10px #00000033;
   margin-top: 20px;
-  width: 600px;
+  width: 800px;
+   margin-bottom: 20px;
 }
 
 form {
@@ -61,6 +89,17 @@ form input, form select {
   margin-top: 5px;
 }
 
+textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: sans-serif;
+  font-size: 16px;
+  margin-top: 5px;
+  width: 100%;
+  resize: vertical;
+}
+
 .btn-register {
   margin-top: 20px;
   background-color: #c1ff00;
@@ -72,7 +111,7 @@ form input, form select {
   cursor: pointer;
 }
 
-.btn-register:hover{
+.btn-register:hover {
   margin-top: 20px;
   background-color: #79a000;
   color: black;
@@ -81,6 +120,56 @@ form input, form select {
   padding: 12px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.plus-button {
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #1200b4;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.plus-button:hover {
+  color: #79a000;
+  transform: scale(1.2);
+}
+
+.plus-button:active {
+  transform: scale(1);
+  color: #4d7200;
+}
+
+.minus-button {
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.minus-button:hover {
+  transform: scale(1.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.form-row .form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 #loader {

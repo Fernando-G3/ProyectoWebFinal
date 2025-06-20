@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publicar Evento</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="register-body">
+  <div class="menu-bar">
+    <div class="left">
+      <a href="#" class="back-arrow"><i class="fa-solid fa-arrow-left"></i></a>
+    </div>
+    <div class="center">
+      <img src="../assets/ticketnoob-logo.png" alt="Logo" class="logo" />
+    </div>
+    <div class="right">
+      <a href="#">Inicio</a>
+      <a href="#">Mis eventos</a>
+      <a href="#">Cerrar sesión</a>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <form id="eventForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="eventName">Nombre del evento</label>
+          <input type="text" id="eventName" name="eventName" />
+        </div>
+        <div class="form-group">
+          <label for="eventDate">Fecha del evento</label>
+          <input type="date" id="eventDate" name="eventDate" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="eventCity">Ciudad del evento</label>
+          <input type="text" id="eventCity" name="eventCity" />
+        </div>
+        <div class="form-group">
+          <label for="eventHour">Hora del evento</label>
+          <input type="text" id="eventHour" name="eventHour" />
+        </div>
+      </div>
+
+      <label for="eventLocation">Ubicación del evento</label>
+      <input type="text" id="eventLocation" name="eventLocation" />
+
+      <label>Mapa del área</label>
+      <input type="file" accept="image/*" />
+
+      <label>Material promocional</label>
+      <input type="file" accept="image/*" />
+
+      <h3 style="margin-top: 20px;">Categoría de boletos</h3>
+
+      <div id="ticketContainer">
+        <div class="ticket-row">
+          <input type="text" name="category[]" placeholder="Categoría: VIP, General, etc" />
+          <input type="text" name="prefix[]" placeholder="Prefijo: A, B, C, etc" />
+          <input type="number" name="quantity[]" placeholder="Cantidad: 32" />
+          <input type="text" name="price[]" placeholder="Precio" />
+          <button type="button" class="minus-button" onclick="removeTicketRow(this)" title="Eliminar categoría">
+            <i class="fa-solid fa-minus"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="plus-button" onclick="addTicketRow()" title="Agregar categoría de boletos">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+
+      <label for="accessibility" style="margin-top: 20px;">Información adicional de accesibilidad</label>
+      <textarea
+        id="accessibility"
+        name="accessibility"
+        rows="3"
+        placeholder="Describa las caracteristicas de accesibilidad, si no hay, deje en blanco."
+      ></textarea>
+
+      <div class="center-button">
+        <button type="submit" class="btn-register">Publicar Evento</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="loader"></div>
+  <div id="alert">Evento publicado correctamente</div>
+  
+  <script src="../js/config.js"></script>
+  <script src="../js/registerevent.js"></script>
+  <script>
+    function addTicketRow() {
+      const container = document.getElementById("ticketContainer");
+      const row = document.createElement("div");
+      row.classList.add("ticket-row");
+      row.innerHTML = `
+        <input type="text" name="category[]" placeholder="Categoría" />
+        <input type="text" name="prefix[]" placeholder="Prefijo: A, B, C, etc" />
+        <input type="number" name="quantity[]" placeholder="Cantidad" />
+        <input type="text" name="price[]" placeholder="Precio" />
+        <button type="button" class="minus-button" onclick="removeTicketRow(this)" title="Eliminar categoría">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+      `;
+      container.appendChild(row);
+    }
+
+    function removeTicketRow(button) {
+      const container = document.getElementById("ticketContainer");
+      if (container.children.length > 1) {
+        button.parentElement.remove();
+      } else {
+        alert("Debe haber al menos una categoría de boletos.");
+      }
+    }
+  </script>
+</body>
+</html>
