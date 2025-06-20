@@ -11,7 +11,7 @@ const {
     createEvent,
     updateEvent,
     getAllAvailableEvents,
-    getEventsByOwner
+    getEventsWithAccessibilityC
 } = require('../controller/eventController');
 
 const { 
@@ -31,9 +31,8 @@ router.put('/user/:id', updateUser);
 router.post('/event/create', createEvent);
 router.put('/event/update/:id', updateEvent);
 router.get('/event/available', getAllAvailableEvents);
-router.get('/event/:idOwner', getEventsByOwner);
+router.get('/event/accessibility', getEventsWithAccessibilityC);
 
-router.post('/event/create-with-seats', createSectionsWithSeats);
 
 router.post('/sale/create', createSale);
 
